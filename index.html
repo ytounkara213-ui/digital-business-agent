@@ -171,6 +171,80 @@ document.getElementById("bookresult").textContent=
 "\n\nDESCRIPTION : "+d+
 "\n\nPROCHAINES ÉTAPES :\n1. Définir le public cible.\n2. Préparer le sommaire.\n3. Rédiger les chapitres.\n4. Relire et vérifier les informations.\n5. Préparer une présentation du livre.";
 }
+// NOUVEL ESPACE COMMERCIAL : WHATSAPP, FACEBOOK, INSTAGRAM ET METRICOOL
+const salesCard = document.createElement("section");
+salesCard.className = "card";
+salesCard.innerHTML = `
+<h2>💼 6. Développer mes ventes et trouver des clients</h2>
+<p>Prépare tes publications et oriente les personnes intéressées vers WhatsApp Business.</p>
+
+<input id="salesProduct" placeholder="Nom du produit ou service">
+<input id="salesAudience" placeholder="Public que tu souhaites toucher">
+
+<select id="salesNetwork">
+<option>Facebook</option>
+<option>Instagram</option>
+<option>TikTok</option>
+<option>WhatsApp</option>
+</select>
+
+<button onclick="prepareSalesContent()">Préparer mon contenu commercial</button>
+<div id="salesResult" class="result">Ton contenu commercial apparaîtra ici.</div>
+
+<button onclick="copySalesContent()">Copier le contenu</button>
+
+<p><strong>📲 Contacter sur WhatsApp Business</strong></p>
+<a href="https://wa.me/message/RVA3ATLA7YVNN1" target="_blank">
+Ouvrir mon WhatsApp Business
+</a>
+
+<p><strong>📊 Gestion des publications avec Metricool</strong></p>
+<a href="https://app.metricool.com/" target="_blank">
+Ouvrir Metricool
+</a>
+
+<p class="small">
+L'agent prépare les contenus et les liens. La publication et l'envoi des messages nécessitent ton action et ton autorisation.
+</p>
+`;
+
+document.querySelector("main").appendChild(salesCard);
+
+function prepareSalesContent() {
+  const product = document.getElementById("salesProduct").value.trim();
+  const audience = document.getElementById("salesAudience").value.trim();
+  const network = document.getElementById("salesNetwork").value;
+
+  const result = document.getElementById("salesResult");
+
+  if (!product || !audience) {
+    result.textContent = "Indique le produit et le public visé.";
+    return;
+  }
+
+  result.textContent =
+    "PUBLICATION POUR " + network.toUpperCase() +
+    "\n\nACCROCHE : Tu recherches une solution pour répondre à tes besoins ?" +
+    "\n\nPRÉSENTATION : Découvre " + product +
+    ", pensé pour " + audience + "." +
+    "\n\nAPPEL À L'ACTION : Pour en savoir plus, contacte-nous sur WhatsApp Business." +
+    "\n\nLien WhatsApp : https://wa.me/message/RVA3ATLA7YVNN1" +
+    "\n\n#TounkaraAIStudio #TounkaraVision #Digital";
+}
+
+function copySalesContent() {
+  const content = document.getElementById("salesResult").textContent;
+
+  if (!content || content === "Ton contenu commercial apparaîtra ici.") {
+    alert("Prépare d'abord ton contenu.");
+    return;
+  }
+
+  navigator.clipboard.writeText(content)
+    .then(() => alert("Contenu copié !"))
+    .catch(() => alert("La copie automatique n'est pas disponible. Sélectionne le texte pour le copier."));
+}
+
 </script>
 </body>
 </html>
