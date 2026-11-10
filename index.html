@@ -1,1 +1,191 @@
-Ajout du fichier principal de l'agent
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Business Agent</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5fb;color:#17233c}
+header{background:linear-gradient(135deg,#101d42,#174b83);color:white;padding:28px 18px;text-align:center}
+header h1{margin:0;font-size:25px}
+header p{color:#d6e5ff}
+main{max-width:850px;margin:20px auto;padding:0 14px}
+.card{background:white;padding:20px;border-radius:15px;margin-bottom:16px;box-shadow:0 3px 15px #10204012}
+h2{font-size:19px;color:#174b83;margin-top:0}
+button{background:#1764a5;color:white;border:0;padding:13px 17px;border-radius:9px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}
+button:hover{background:#104878}
+input,textarea,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ccd5e3;border-radius:8px;font-size:15px}
+textarea{min-height:100px}
+.result{background:#edf5ff;border-left:4px solid #1764a5;padding:14px;border-radius:8px;margin-top:14px;white-space:pre-wrap;line-height:1.5}
+.small{font-size:13px;color:#65738a}
+footer{text-align:center;padding:25px;color:#68758a;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>TOUNKARA DIGITAL BUSINESS AGENT</h1>
+<p>Ton assistant pour développer tes idées de produits numériques.</p>
+<strong>Votre Vision, Notre Expertise</strong>
+</header>
+
+<main>
+
+<section class="card">
+<h2>💡 1. Générateur d'idées d'eBooks</h2>
+<p>Découvre des idées de livres numériques à développer.</p>
+<select id="theme">
+<option value="business">Business et entrepreneuriat</option>
+<option value="education">Éducation et formation</option>
+<option value="technology">Intelligence artificielle et technologie</option>
+<option value="personal">Développement personnel</option>
+<option value="marketing">Marketing et réseaux sociaux</option>
+</select>
+<button onclick="generateIdea()">Trouver une idée d'eBook</button>
+<div id="idea" class="result">Ton idée apparaîtra ici.</div>
+</section>
+
+<section class="card">
+<h2>📈 2. Préparer une stratégie marketing</h2>
+<p>Construis un premier plan pour présenter ton produit.</p>
+<input id="product" placeholder="Nom de ton produit ou eBook">
+<input id="audience" placeholder="À qui veux-tu le proposer ?">
+<input id="price" placeholder="Prix envisagé (facultatif)">
+<button onclick="marketingPlan()">Créer mon plan marketing</button>
+<div id="marketing" class="result">Ton plan apparaîtra ici.</div>
+</section>
+
+<section class="card">
+<h2>📱 3. Calendrier de publications</h2>
+<p>Prépare des idées de publications pour tes réseaux.</p>
+<input id="subject" placeholder="Sujet de ta publication">
+<select id="network">
+<option>TikTok</option>
+<option>Facebook</option>
+<option>Instagram</option>
+<option>WhatsApp</option>
+</select>
+<button onclick="makePost()">Préparer une publication</button>
+<div id="post" class="result">Ta proposition apparaîtra ici.</div>
+</section>
+
+<section class="card">
+<h2>📝 4. Organiser un projet d'eBook</h2>
+<p>Note les grandes lignes de ton prochain livre numérique.</p>
+<input id="booktitle" placeholder="Titre provisoire de l'eBook">
+<textarea id="bookidea" placeholder="Décris ton idée, les chapitres ou les conseils à inclure..."></textarea>
+<button onclick="saveBook()">Préparer ma fiche projet</button>
+<div id="bookresult" class="result">Ta fiche projet apparaîtra ici.</div>
+</section>
+
+<section class="card">
+<h2>🎯 5. Mes prochaines actions</h2>
+<ul>
+<li>Choisir une idée utile.</li>
+<li>Identifier les personnes intéressées.</li>
+<li>Préparer un contenu original.</li>
+<li>Présenter le produit sur les réseaux.</li>
+<li>Évaluer les retours et améliorer l'offre.</li>
+</ul>
+<p class="small">Ce tableau de bord prépare des idées et des modèles. Il ne réalise pas encore de recherches Internet en direct ni de ventes automatiques.</p>
+</section>
+
+</main>
+
+<footer>
+<strong>TOUNKARA AI STUDIO</strong><br>
+Digital Business Agent — Version 1.0
+</footer>
+
+<script>
+const ideas={
+business:[
+"Créer un petit commerce avec un budget limité",
+"Les bases pour lancer une activité en ligne",
+"Comment préparer son premier produit numérique"
+],
+education:[
+"Apprendre à mieux organiser son temps d'étude",
+"Guide pratique pour apprendre une nouvelle compétence",
+"Réussir ses révisions avec une méthode simple"
+],
+technology:[
+"Comprendre l'intelligence artificielle pour débutants",
+"Utiliser les outils numériques pour gagner du temps",
+"Créer ses premiers contenus avec l'intelligence artificielle"
+],
+personal:[
+"Développer sa confiance et ses habitudes positives",
+"Apprendre à fixer des objectifs réalistes",
+"Organiser ses journées avec méthode"
+],
+marketing:[
+"Débuter sur TikTok avec une stratégie de contenu",
+"Créer des publications intéressantes sur Facebook",
+"Présenter un produit avec des vidéos courtes"
+]
+};
+
+function generateIdea(){
+const list=ideas[document.getElementById("theme").value];
+const idea=list[Math.floor(Math.random()*list.length)];
+document.getElementById("idea").textContent=
+"IDÉE PROPOSÉE : "+idea+
+"\n\nPUBLIC CIBLE : débutants et personnes intéressées par ce sujet."+
+"\n\nPLAN POSSIBLE :\n1. Introduction\n2. Les bases à connaître\n3. Conseils pratiques\n4. Exemples\n5. Conclusion et prochaines étapes."+
+"\n\nÀ vérifier : l'intérêt réel du public avant de créer et vendre le livre.";
+}
+
+function marketingPlan(){
+const p=document.getElementById("product").value.trim();
+const a=document.getElementById("audience").value.trim();
+const price=document.getElementById("price").value.trim();
+if(!p||!a){
+document.getElementById("marketing").textContent="Indique le nom du produit et le public visé.";
+return;
+}
+document.getElementById("marketing").textContent=
+"PLAN MARKETING : "+p+
+"\n\nPUBLIC : "+a+
+"\nPRIX ENVISAGÉ : "+(price||"À définir")+
+"\n\nÉTAPE 1 : Présenter le problème auquel ton produit répond."+
+"\n\nÉTAPE 2 : Expliquer clairement ce que le produit apporte."+
+"\n\nÉTAPE 3 : Publier une courte vidéo de présentation."+
+"\n\nÉTAPE 4 : Partager un extrait ou un conseil gratuit."+
+"\n\nÉTAPE 5 : Recueillir les avis et améliorer le produit."+
+"\n\nPense à vérifier les besoins du public et à rester honnête dans tes promesses.";
+}
+
+function makePost(){
+const s=document.getElementById("subject").value.trim();
+const n=document.getElementById("network").value;
+if(!s){
+document.getElementById("post").textContent="Écris d'abord le sujet de ta publication.";
+return;
+}
+document.getElementById("post").textContent=
+"RÉSEAU : "+n+
+"\n\nACCROCHE : Tu souhaites en savoir plus sur "+s+" ?"+
+"\n\nMESSAGE : Découvre nos conseils et nos idées pratiques autour de "+s+". Apprends, progresse et partage tes expériences !"+
+"\n\nAPPEL À L'ACTION : Abonne-toi et partage cette publication."+
+"\n\n#TounkaraAIStudio #Conseils #Digital";
+}
+
+function saveBook(){
+const t=document.getElementById("booktitle").value.trim();
+const d=document.getElementById("bookidea").value.trim();
+if(!t||!d){
+document.getElementById("bookresult").textContent="Ajoute un titre et une description pour préparer ta fiche.";
+return;
+}
+document.getElementById("bookresult").textContent=
+"FICHE PROJET EBOOK\n\nTITRE : "+t+
+"\n\nDESCRIPTION : "+d+
+"\n\nPROCHAINES ÉTAPES :\n1. Définir le public cible.\n2. Préparer le sommaire.\n3. Rédiger les chapitres.\n4. Relire et vérifier les informations.\n5. Préparer une présentation du livre.";
+}
+</script>
+
+</body>
+</html>
