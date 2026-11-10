@@ -1,127 +1,176 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101827">
-<title>TOUNKARA CYBER GUARDIAN AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Business Agent</title>
 <style>
-:root{--bg:#0b1220;--panel:#121d30;--panel2:#17243a;--line:#263650;--text:#edf3ff;--muted:#9eacc2;--gold:#e8bd65;--green:#55c99a;--yellow:#f1c66d;--red:#f07b7b;--blue:#83b7ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1b2b46 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.wrap{max-width:1180px;margin:auto;padding:26px 18px 50px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-.brand{display:flex;gap:13px;align-items:center}.shield{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#e8bd65,#946b2e);color:#101827;font-size:25px;font-weight:900}
-h1{font-size:clamp(20px,4vw,30px);margin:0;letter-spacing:.3px}.sub{color:var(--muted);font-size:13px}.pill{border:1px solid #3b5b50;color:#a5e5c8;background:#16352f;padding:7px 12px;border-radius:99px;font-size:12px}
-.notice{padding:13px 15px;border:1px solid #705b32;background:#302819;border-radius:13px;color:#f4dca9;margin-bottom:18px;font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:14px 0 20px}.card,.panel{background:linear-gradient(160deg,var(--panel),#101a2b);border:1px solid var(--line);border-radius:16px;padding:17px;min-width:0}
-.metric small,.muted{color:var(--muted)}.metric strong{display:block;font-size:27px;margin-top:6px}.metric .hint{font-size:12px;color:var(--muted)}
-.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.panel h2{font-size:17px;margin:0 0 13px}.accounts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.account{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
-.account b{display:block}.account small{color:var(--muted)}.state{font-size:11px;border-radius:99px;padding:4px 8px;white-space:nowrap;background:#33303a;color:#f1d59a}
-.state.off{background:#302a1e;color:#f1d59a}.state.ok{background:#17352e;color:#9de0c0}
-.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:1px solid #405574;background:#1b2a42;color:var(--text);padding:9px 12px;border-radius:10px;cursor:pointer;font-weight:600}.btn.primary{background:var(--gold);color:#172033;border-color:var(--gold)}.btn:hover{filter:brightness(1.1)}
-textarea,input{width:100%;background:#0c1627;color:var(--text);border:1px solid #344761;border-radius:10px;padding:11px;font:inherit}textarea{min-height:115px;resize:vertical}.field{margin:10px 0}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-.result{margin-top:12px;padding:12px;border-radius:11px;background:#0c1627;border:1px solid var(--line);display:none}.result.show{display:block}.tag{font-size:11px;padding:3px 8px;border-radius:99px;font-weight:700}.high{background:#4a252b;color:#ffaaaa}.med{background:#47391e;color:#ffdc91}.low{background:#17382e;color:#a6e4c5}
-ul.clean{padding-left:18px;margin:8px 0;color:var(--muted)}.activity{display:grid;gap:9px}.event{border-left:3px solid #526b8b;padding:3px 0 3px 11px;color:var(--muted);font-size:13px}.event b{color:var(--text)}
-footer{margin-top:20px;color:var(--muted);font-size:12px;text-align:center}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}}
-@media(max-width:480px){.accounts{grid-template-columns:1fr}.wrap{padding:18px 12px 36px}.card,.panel{padding:14px}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5fb;color:#17233c}
+header{background:linear-gradient(135deg,#101d42,#174b83);color:white;padding:28px 18px;text-align:center}
+header h1{margin:0;font-size:25px}
+header p{color:#d6e5ff}
+main{max-width:850px;margin:20px auto;padding:0 14px}
+.card{background:white;padding:20px;border-radius:15px;margin-bottom:16px;box-shadow:0 3px 15px #10204012}
+h2{font-size:19px;color:#174b83;margin-top:0}
+button{background:#1764a5;color:white;border:0;padding:13px 17px;border-radius:9px;font-weight:bold;cursor:pointer;width:100%;margin-top:10px}
+button:hover{background:#104878}
+input,textarea,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ccd5e3;border-radius:8px;font-size:15px}
+textarea{min-height:100px}
+.result{background:#edf5ff;border-left:4px solid #1764a5;padding:14px;border-radius:8px;margin-top:14px;white-space:pre-wrap;line-height:1.5}
+.small{font-size:13px;color:#65738a}
+footer{text-align:center;padding:25px;color:#68758a;font-size:13px}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header class="top">
-  <div class="brand"><div class="shield">✦</div><div><h1>TOUNKARA CYBER GUARDIAN AI</h1><div class="sub">Centre de contrôle de sécurité numérique</div></div></div>
-  <span class="pill">● Tableau de bord local</span>
+<header>
+<h1>TOUNKARA DIGITAL BUSINESS AGENT</h1>
+<p>Ton assistant pour développer tes idées de produits numériques.</p>
+<strong>Votre Vision, Notre Expertise</strong>
 </header>
-<div class="notice"><b>Mode démonstration :</b> ce tableau de bord ne surveille pas automatiquement tes comptes. Les statuts sont « à vérifier » tant qu'une connexion officielle et autorisée n'est pas configurée. N'inscris jamais de mot de passe, code de vérification ou clé secrète ici.</div>
-
-<section class="grid">
-  <div class="card metric"><small>Comptes listés</small><strong>5</strong><div class="hint">Réseaux et messagerie</div></div>
-  <div class="card metric"><small>Contrôles confirmés</small><strong id="checkedCount">0</strong><div class="hint">Dans cette session</div></div>
-  <div class="card metric"><small>Risques détectés</small><strong id="riskCount">—</strong><div class="hint">Aucun audit connecté</div></div>
-  <div class="card metric"><small>Prochain bilan</small><strong>Dimanche</strong><div class="hint">Rapport hebdomadaire programmé séparément</div></div>
+<main>
+<section class="card">
+<h2>💡 1. Générateur d'idées d'eBooks</h2>
+<p>Découvre des idées de livres numériques à développer.</p>
+<select id="theme">
+<option value="business">Business et entrepreneuriat</option>
+<option value="education">Éducation et formation</option>
+<option value="technology">Intelligence artificielle et technologie</option>
+<option value="personal">Développement personnel</option>
+<option value="marketing">Marketing et réseaux sociaux</option>
+</select>
+<button onclick="generateIdea()">Trouver une idée d'eBook</button>
+<div id="idea" class="result">Ton idée apparaîtra ici.</div>
 </section>
-
-<div class="layout">
-<section class="panel">
-  <h2>Comptes à protéger</h2>
-  <div class="accounts" id="accounts">
-    <div class="account"><div><b>TikTok</b><small>Compte social</small></div><span class="state off">À vérifier</span></div>
-    <div class="account"><div><b>Instagram</b><small>Compte social</small></div><span class="state off">À vérifier</span></div>
-    <div class="account"><div><b>Facebook</b><small>Compte social</small></div><span class="state off">À vérifier</span></div>
-    <div class="account"><div><b>YouTube</b><small>Chaîne vidéo</small></div><span class="state off">À vérifier</span></div>
-    <div class="account"><div><b>Gmail</b><small>Messagerie</small></div><span class="state off">À vérifier</span></div>
-    <div class="account"><div><b>GitHub</b><small>Dépôts et code</small></div><span class="state off">Non connecté</span></div>
-  </div>
-  <div class="tools"><button class="btn" id="markReview">Marquer un contrôle manuel</button><button class="btn" id="reset">Réinitialiser la session</button></div>
+<section class="card">
+<h2>📈 2. Préparer une stratégie marketing</h2>
+<p>Construis un premier plan pour présenter ton produit.</p>
+<input id="product" placeholder="Nom de ton produit ou eBook">
+<input id="audience" placeholder="À qui veux-tu le proposer ?">
+<input id="price" placeholder="Prix envisagé (facultatif)">
+<button onclick="marketingPlan()">Créer mon plan marketing</button>
+<div id="marketing" class="result">Ton plan apparaîtra ici.</div>
 </section>
-
-<section class="panel">
-  <h2>État des protections</h2>
-  <div class="activity">
-    <div class="event"><b>Authentification à deux facteurs</b><br>À confirmer dans chaque compte.</div>
-    <div class="event"><b>Sessions et appareils</b><br>Non vérifiés — consulter les paramètres officiels.</div>
-    <div class="event"><b>Applications connectées</b><br>Non vérifiées — examiner les autorisations.</div>
-    <div class="event"><b>Dépôts GitHub</b><br>En attente de connexion et d'autorisation.</div>
-    <div class="event"><b>Sauvegardes et récupération</b><br>À vérifier dans les paramètres officiels.</div>
-  </div>
+<section class="card">
+<h2>📱 3. Calendrier de publications</h2>
+<p>Prépare des idées de publications pour tes réseaux.</p>
+<input id="subject" placeholder="Sujet de ta publication">
+<select id="network">
+<option>TikTok</option>
+<option>Facebook</option>
+<option>Instagram</option>
+<option>WhatsApp</option>
+</select>
+<button onclick="makePost()">Préparer une publication</button>
+<div id="post" class="result">Ta proposition apparaîtra ici.</div>
 </section>
-
-<section class="panel">
-  <h2>Détecteur de message ou lien suspect</h2>
-  <p class="muted">Colle un message ou un lien reçu. L'analyse locale recherche quelques signes d'alerte ; elle ne prouve pas qu'un contenu est sûr ou frauduleux.</p>
-  <div class="field"><label for="sample">Message ou lien à examiner</label><textarea id="sample" placeholder="Colle ici le texte suspect. Retire d'abord tes informations personnelles et tout code confidentiel."></textarea></div>
-  <button class="btn primary" id="analyze">Analyser les signes d'alerte</button>
-  <div class="result" id="result" aria-live="polite"></div>
+<section class="card">
+<h2>📝 4. Organiser un projet d'eBook</h2>
+<p>Note les grandes lignes de ton prochain livre numérique.</p>
+<input id="booktitle" placeholder="Titre provisoire de l'eBook">
+<textarea id="bookidea" placeholder="Décris ton idée, les chapitres ou les conseils à inclure..."></textarea>
+<button onclick="saveBook()">Préparer ma fiche projet</button>
+<div id="bookresult" class="result">Ta fiche projet apparaîtra ici.</div>
 </section>
-
-<section class="panel">
-  <h2>Plan d'action prioritaire</h2>
-  <ul class="clean">
-    <li>Activer la double authentification sur les comptes importants.</li>
-    <li>Utiliser un mot de passe unique pour chaque service.</li>
-    <li>Vérifier les appareils et sessions connectés depuis les applications officielles.</li>
-    <li>Ne jamais ouvrir une page de connexion depuis un lien inattendu.</li>
-    <li>Sur GitHub, activer les alertes de sécurité et examiner les permissions des dépôts.</li>
-    <li>Conserver les moyens de récupération en lieu sûr, hors de ce tableau de bord.</li>
-  </ul>
+<section class="card">
+<h2>🎯 5. Mes prochaines actions</h2>
+<ul>
+<li>Choisir une idée utile.</li>
+<li>Identifier les personnes intéressées.</li>
+<li>Préparer un contenu original.</li>
+<li>Présenter le produit sur les réseaux.</li>
+<li>Évaluer les retours et améliorer l'offre.</li>
+</ul>
+<p class="small">Ce tableau de bord prépare des idées et des modèles. Il ne réalise pas encore de recherches Internet en direct ni de ventes automatiques.</p>
 </section>
-</div>
-<footer>TOUNKARA CYBER GUARDIAN AI · Prototype local · Aucune connexion à un compte externe</footer>
-</div>
+</main>
+<footer>
+<strong>TOUNKARA AI STUDIO</strong><br>
+Digital Business Agent — Version 1.0
+</footer>
 <script>
-const checked = document.getElementById('checkedCount');
-let checks = 0;
-document.getElementById('markReview').addEventListener('click',()=>{
-  checks += 1; checked.textContent = String(checks);
-  alert('Contrôle manuel noté dans cette session. Cela ne signifie pas qu’un compte a été audité automatiquement.');
-});
-document.getElementById('reset').addEventListener('click',()=>{
-  checks = 0; checked.textContent = '0';
-  document.getElementById('riskCount').textContent = '—';
-  document.getElementById('result').className = 'result';
-  document.getElementById('sample').value = '';
-});
-document.getElementById('analyze').addEventListener('click',()=>{
-  const value = document.getElementById('sample').value.trim();
-  const result = document.getElementById('result');
-  if(!value){result.className='result show';result.textContent='Ajoute un message ou un lien à examiner.';return;}
-  const patterns = [
-    ['Demande de mot de passe, code ou données bancaires',/mot de passe|password|code de vérification|code sms|coordonnées bancaires|carte bancaire|pin\b/i],
-    ['Urgence ou menace pour pousser à agir vite',/urgent|immédiatement|dans les \d+ minutes|dernier avertissement|compte sera suspendu|bloqué aujourd'hui/i],
-    ['Promesse de gain ou cadeau inattendu',/vous avez gagné|gain garanti|cadeau gratuit|réclamez votre prix|lotterie|million/i],
-    ['Demande de paiement ou frais préalables',/frais de dossier|payer.*débloquer|frais.*livraison|envoyez.*argent|transfert d'argent/i],
-    ['Lien ou adresse web à vérifier avec prudence',/https?:\/\/|www\./i]
-  ];
-  const found = patterns.filter(p=>p[1].test(value)).map(p=>p[0]);
-  let level = found.length>=3?'Élevé':found.length>=1?'À examiner':'Aucun signe repéré par les règles simples';
-  let cls = found.length>=3?'high':found.length>=1?'med':'low';
-  result.className='result show';
-  result.innerHTML='<span class="tag '+cls+'">'+level+'</span><p><b>Signes repérés :</b></p>';
-  if(found.length){const ul=document.createElement('ul');found.forEach(item=>{const li=document.createElement('li');li.textContent=item;ul.appendChild(li)});result.appendChild(ul);}
-  else {const p=document.createElement('p');p.textContent='Les règles locales n’ont repéré aucun des signes recherchés. Cela ne garantit pas que le message ou le lien soit fiable.';result.appendChild(p);}
-  const advice=document.createElement('p');advice.textContent='Conseil : ne partage aucun code ni mot de passe. Vérifie toute demande en ouvrant toi-même l’application ou le site officiel, sans utiliser le lien reçu.';result.appendChild(advice);
-});
+const ideas={
+business:[
+"Créer un petit commerce avec un budget limité",
+"Les bases pour lancer une activité en ligne",
+"Comment préparer son premier produit numérique"
+],
+education:[
+"Apprendre à mieux organiser son temps d'étude",
+"Guide pratique pour apprendre une nouvelle compétence",
+"Réussir ses révisions avec une méthode simple"
+],
+technology:[
+"Comprendre l'intelligence artificielle pour débutants",
+"Utiliser les outils numériques pour gagner du temps",
+"Créer ses premiers contenus avec l'intelligence artificielle"
+],
+personal:[
+"Développer sa confiance et ses habitudes positives",
+"Apprendre à fixer des objectifs réalistes",
+"Organiser ses journées avec méthode"
+],
+marketing:[
+"Débuter sur TikTok avec une stratégie de contenu",
+"Créer des publications intéressantes sur Facebook",
+"Présenter un produit avec des vidéos courtes"
+]
+};
+function generateIdea(){
+const list=ideas[document.getElementById("theme").value];
+const idea=list[Math.floor(Math.random()*list.length)];
+document.getElementById("idea").textContent=
+"IDÉE PROPOSÉE : "+idea+
+"\n\nPUBLIC CIBLE : débutants et personnes intéressées par ce sujet."+
+"\n\nPLAN POSSIBLE :\n1. Introduction\n2. Les bases à connaître\n3. Conseils pratiques\n4. Exemples\n5. Conclusion et prochaines étapes."+
+"\n\nÀ vérifier : l'intérêt réel du public avant de créer et vendre le livre.";
+}
+function marketingPlan(){
+const p=document.getElementById("product").value.trim();
+const a=document.getElementById("audience").value.trim();
+const price=document.getElementById("price").value.trim();
+if(!p||!a){
+document.getElementById("marketing").textContent="Indique le nom du produit et le public visé.";
+return;
+}
+document.getElementById("marketing").textContent=
+"PLAN MARKETING : "+p+
+"\n\nPUBLIC : "+a+
+"\nPRIX ENVISAGÉ : "+(price||"À définir")+
+"\n\nÉTAPE 1 : Présenter le problème auquel ton produit répond."+
+"\n\nÉTAPE 2 : Expliquer clairement ce que le produit apporte."+
+"\n\nÉTAPE 3 : Publier une courte vidéo de présentation."+
+"\n\nÉTAPE 4 : Partager un extrait ou un conseil gratuit."+
+"\n\nÉTAPE 5 : Recueillir les avis et améliorer le produit."+
+"\n\nPense à vérifier les besoins du public et à rester honnête dans tes promesses.";
+}
+function makePost(){
+const s=document.getElementById("subject").value.trim();
+const n=document.getElementById("network").value;
+if(!s){
+document.getElementById("post").textContent="Écris d'abord le sujet de ta publication.";
+return;
+}
+document.getElementById("post").textContent=
+"RÉSEAU : "+n+
+"\n\nACCROCHE : Tu souhaites en savoir plus sur "+s+" ?"+
+"\n\nMESSAGE : Découvre nos conseils et nos idées pratiques autour de "+s+". Apprends, progresse et partage tes expériences !"+
+"\n\nAPPEL À L'ACTION : Abonne-toi et partage cette publication."+
+"\n\n#TounkaraAIStudio #Conseils #Digital";
+}
+function saveBook(){
+const t=document.getElementById("booktitle").value.trim();
+const d=document.getElementById("bookidea").value.trim();
+if(!t||!d){
+document.getElementById("bookresult").textContent="Ajoute un titre et une description pour préparer ta fiche.";
+return;
+}
+document.getElementById("bookresult").textContent=
+"FICHE PROJET EBOOK\n\nTITRE : "+t+
+"\n\nDESCRIPTION : "+d+
+"\n\nPROCHAINES ÉTAPES :\n1. Définir le public cible.\n2. Préparer le sommaire.\n3. Rédiger les chapitres.\n4. Relire et vérifier les informations.\n5. Préparer une présentation du livre.";
+}
 </script>
 </body>
 </html>
