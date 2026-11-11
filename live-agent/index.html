@@ -1,0 +1,119 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>TOUNKARA VISION — Agent LIVE</title>
+<style>
+:root{color-scheme:dark;--gold:#e6bd68;--panel:#17243a;--line:#30415d}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 16px;background:#0d1728;color:#f4f6fb;font:16px/1.5 system-ui,Arial,sans-serif;max-width:850px;margin:auto}
+h1{color:var(--gold)}
+p,small{color:#bdc8d8}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0}
+label{display:block;margin:12px 0}
+input,textarea{display:block;width:100%;margin-top:6px;padding:11px;border-radius:8px;border:1px solid #40516b;background:#0d1728;color:white;font:inherit}
+textarea{min-height:75px}
+button{padding:11px 15px;border:0;border-radius:8px;background:var(--gold);color:#182033;font-weight:bold;cursor:pointer;margin:5px 5px 5px 0}
+.check{display:flex;gap:10px;align-items:flex-start}
+.check input{width:auto;margin-top:5px}
+.result{white-space:pre-wrap;background:#0d1728;padding:12px;border-radius:8px;border:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<p><strong>TOUNKARA VISION</strong></p>
+<h1>Agent LIVE — Préparation & modération</h1>
+<p>Un assistant pour préparer tes sessions et organiser leur déroulement. Cet outil ne lance ni ne programme aucun LIVE.</p>
+
+<section class="panel">
+<h2>Règles d'accès et sécurité</h2>
+<p>Vérifie directement dans TikTok les conditions d'âge, d'accès et les règles applicables à ton compte et à ton pays. N'essaie jamais de contourner une restriction. Ne partage aucun mot de passe, code de vérification ou renseignement privé.</p>
+</section>
+
+<section class="panel">
+<h2>1. Préparer le contenu de la session</h2>
+
+<label>Thème de la session
+<input id="theme" placeholder="Ex. : présenter un projet créatif">
+</label>
+
+<label>Public visé
+<input id="audience" placeholder="Ex. : personnes intéressées par la création vidéo">
+</label>
+
+<label>Message d'accueil
+<textarea id="welcome" placeholder="Écris un accueil simple et respectueux."></textarea>
+</label>
+
+<label>Déroulement prévu
+<textarea id="plan" placeholder="1. Présentation&#10;2. Sujet principal&#10;3. Questions et réponses&#10;4. Conclusion"></textarea>
+</label>
+
+<button id="make">Préparer ma fiche</button>
+<button id="copy">Copier la fiche</button>
+
+<p id="output" class="result" aria-live="polite">La fiche de préparation apparaîtra ici.</p>
+</section>
+
+<section class="panel">
+<h2>2. Checklist avant diffusion</h2>
+
+<div class="check"><input type="checkbox" id="age"><label for="age">J'ai vérifié les conditions d'âge officielles de TikTok.</label></div>
+<div class="check"><input type="checkbox" id="access"><label for="access">TikTok confirme que mon compte dispose de l'accès LIVE.</label></div>
+<div class="check"><input type="checkbox" id="rules"><label for="rules">Mon contenu respecte les règles communautaires.</label></div>
+<div class="check"><input type="checkbox" id="privacy"><label for="privacy">Je ne montrerai aucune donnée personnelle ou confidentielle.</label></div>
+<div class="check"><input type="checkbox" id="moderation"><label for="moderation">J'ai prévu comment gérer les commentaires abusifs.</label></div>
+
+<p id="status" class="result" aria-live="polite">Cette checklist ne donne pas accès à LIVE et ne remplace pas les règles officielles.</p>
+</section>
+
+<section class="panel">
+<h2>3. Conseils de modération</h2>
+<ul>
+<li>Rappeler les règles de respect au début de la session.</li>
+<li>Ne pas afficher les coordonnées ni les messages privés d'un spectateur.</li>
+<li>Ne jamais demander de mot de passe ou de code de connexion.</li>
+<li>Utiliser les outils de modération proposés par TikTok.</li>
+<li>Mettre fin à la session si une situation devient dangereuse.</li>
+</ul>
+</section>
+
+<p><small>Prototype V1 · Préparation uniquement · Aucun accès au compte TikTok · Aucune diffusion automatique.</small></p>
+
+<script>
+const checks=["age","access","rules","privacy","moderation"];
+
+function updateStatus(){
+ const ok=checks.every(id=>document.getElementById(id).checked);
+ document.getElementById("status").textContent=ok
+ ? "Vérifications cochées. Confirme toujours les conditions directement dans TikTok. Cet outil ne lancera aucun LIVE."
+ : "Il reste des vérifications à faire. Cette liste ne remplace pas les règles officielles.";
+}
+
+checks.forEach(id=>document.getElementById(id).addEventListener("change",updateStatus));
+
+document.getElementById("make").addEventListener("click",()=>{
+ const val=id=>document.getElementById(id).value.trim()||"À compléter";
+ document.getElementById("output").textContent=
+ "TOUNKARA VISION — FICHE DE PRÉPARATION\n"+
+ "Thème : "+val("theme")+"\nPublic : "+val("audience")+
+ "\nAccueil : "+val("welcome")+"\nDéroulement :\n"+val("plan")+
+ "\n\nRAPPEL : vérifier les conditions officielles TikTok. Aucun lancement automatique.";
+});
+
+document.getElementById("copy").addEventListener("click",async()=>{
+ const text=document.getElementById("output").textContent;
+ try{
+  await navigator.clipboard.writeText(text);
+  document.getElementById("copy").textContent="Fiche copiée";
+ }catch(e){
+  document.getElementById("copy").textContent="Sélectionne le texte pour le copier";
+ }
+});
+</script>
+
+</body>
+</html>
