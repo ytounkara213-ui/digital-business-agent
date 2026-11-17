@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10243a">
+<title>Gestion commerciale Pro</title>
+<style>
+:root{--navy:#10243a;--blue:#1769aa;--gold:#d5a642;--bg:#f3f6fa;--ink:#172536;--muted:#68788b;--line:#e3e9f0;--green:#16845b;--red:#c44545}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,Arial,sans-serif}
+.app{max-width:1400px;margin:auto;min-height:100vh}
+.top{background:linear-gradient(120deg,#10243a,#1d4969);color:white;padding:22px 25px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:20px}
+.brand small{display:block;color:#d9e5f0;font-size:12px;font-weight:500;margin-top:4px}
+.layout{display:grid;grid-template-columns:210px 1fr;gap:18px;padding:20px}
+.side{background:white;border:1px solid var(--line);border-radius:15px;padding:10px;height:max-content}
+.nav{width:100%;text-align:left;border:0;background:transparent;padding:12px;border-radius:9px;color:#42546a;font-weight:650;cursor:pointer;margin:2px 0}
+.nav.active,.nav:hover{background:#eaf2f9;color:#124d7b}
+.main{min-width:0}
+h1{font-size:24px;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat span{color:var(--muted);font-size:13px}
+.stat strong{display:block;font-size:23px;margin-top:8px}
+.panel{margin-top:14px}
+.panel h3{margin:0 0 14px;font-size:16px}
+.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+.btn.secondary{background:#eaf0f5;color:#29445e}
+.btn.gold{background:var(--gold);color:#172536}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field label{display:block;font-size:13px;font-weight:650;margin-bottom:5px}
+.field input,.field select{width:100%;padding:11px;border:1px solid #d7e0e9;border-radius:9px;font:inherit}
+.tablewrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:580px}
+th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line);font-size:13px}
+th{color:var(--muted);background:#fafbfd}
+.notice{background:#fff8e9;border:1px solid #f0dfb9;padding:12px;border-radius:10px;color:#76561b;font-size:13px;margin-bottom:14px}
+.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:#07172799;display:grid;place-items:center;padding:15px;z-index:5}
+.dialog{background:white;border-radius:15px;padding:20px;width:min(550px,100%);max-height:90vh;overflow:auto}
+.dialogfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#10243a;color:white;padding:12px 18px;border-radius:10px;z-index:9}
+.pill{display:inline-block;border-radius:20px;padding:4px 8px;font-size:11px;font-weight:750;background:#e9f5ef;color:#16724f}
+.warn{background:#fff3df;color:#946015}
+.muted{color:var(--muted)}
+.footer{text-align:center;padding:20px;color:#8491a0;font-size:12px}
+@media(max-width:800px){.layout{grid-template-columns:1fr;padding:12px}.side{display:flex;overflow:auto;gap:4px}.nav{white-space:nowrap;width:auto}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.grid{gap:8px}.stat{padding:11px}.stat strong{font-size:18px}.formgrid{grid-template-columns:1fr}h1{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+<div class="brand">GESTION COMMERCIALE PRO
+<small>TOUNKARA AI STUDIO · Votre activité, mieux organisée</small></div>
+<div class="actions">
+<button class="btn secondary" onclick="backup()">Sauvegarder</button>
+<button class="btn gold" onclick="document.getElementById('restore').click()">Restaurer</button>
+<input type="file" id="restore" accept="application/json" hidden onchange="restoreData(event)">
+</div>
+</header>
+<div class="layout">
+<aside class="side" id="nav">
+<button class="nav active" data-page="dashboard">▦ Tableau de bord</button>
+<button class="nav" data-page="products">▤ Produits & stock</button>
+<button class="nav" data-page="sales">▣ Ventes</button>
+<button class="nav" data-page="clients">♙ Clients</button>
+<button class="nav" data-page="suppliers">♧ Fournisseurs</button>
+<button class="nav" data-page="expenses">↘ Dépenses</button>
+<button class="nav" data-page="reports">▥ Rapports</button>
+</aside>
+<main class="main">
+<div class="notice"><b>Important :</b> les données sont enregistrées dans ce navigateur sur cet appareil. Elles ne sont pas encore synchronisées avec ton ordinateur. Pense à sauvegarder régulièrement.</div>
+<section id="content"></section>
+</main>
+</div>
+<div class="footer">Gestion commerciale Pro · Tounkara AI Studio · Monnaie : FCFA</div>
+</div>
+<div id="modal" class="modal hidden">
+<div class="dialog"><div id="modalBody"></div></div>
+</div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+const KEY='tounkara_gestion_pro_v1';
+const fresh=()=>({products:[],sales:[],clients:[],suppliers:[],expenses:[]});
+let db=load(),page='dashboard';
+
+function load(){
+try{
+const x=JSON.parse(localStorage.getItem(KEY));
+return x&&['products','sales','clients','suppliers','expenses'].every(k=>Array.isArray(x[k]))?x:fresh();
+}catch(e){return fresh()}
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+const $=s=>document.querySelector(s);
+const money=n=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Number(n)||0)+' F CFA';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function sum(a,f){return a.reduce((n,x)=>n+f(x),0)}
+function paid(s){return sum(s.payments||[],p=>Number(p.amount)||0)}
+function due(s){return Math.max(0,Number(s.total)-paid(s))}
+function dateNow(){return new Date().toISOString().slice(0,10)}
+function toast(s){
+const t=$('#toast');t.textContent=s;t.classList.remove('hidden');
+setTimeout(()=>t.classList.add('hidden'),2500);
+}
+function clientName(id){return db.clients.find(x=>x.id===id)?.name||'Client comptoir'}
+
+function show(){
+document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+const pages={dashboard,products,sales,clients,suppliers,expenses,reports};
+pages[page]($('#content'));
+}
+function title(t){return '<h1>'+t+'</h1>'}
+function table(headers,rows){
+return '<div class="tablewrap"><table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+(rows||'<tr><td colspan="'+headers.length+'" class="muted">Aucune donnée pour le moment.</td></tr>')+'</tbody></table></div>';
+}
+
+function dashboard(c){
+const revenue=sum(db.sales,s=>s.total);
+const cost=sum(db.sales,s=>sum(s.items||[],i=>i.cost*i.qty));
+const out=sum(db.expenses,e=>e.amount);
+const balance=sum(db.sales,due);
+const stock=sum(db.products,p=>p.cost*p.qty);
+const low=db.products.filter(p=>p.qty<=p.alert);
+c.innerHTML=title('Tableau de bord')+
+'<div class="grid">'+[
+['Chiffre des ventes',money(revenue)],
+['Dépenses',money(out)],
+['Résultat estimé',money(revenue-cost-out)],
+['Reste à encaisser',money(balance)],
+['Valeur du stock',money(stock)],
+['Produits en alerte',low.length]
+].map(x=>'<div class="stat"><span>'+x[0]+'</span><strong>'+x[1]+'</strong></div>').join('')+
+'</div><div class="panel"><h3>Alertes de stock</h3>'+
+(low.length?table(['Produit','Stock','Seuil'],low.map(p=>'<tr><td>'+esc(p.name)+'</td><td><span class="pill warn">'+p.qty+'</span></td><td>'+p.alert+'</td></tr>').join('')):'<p class="muted">Aucune alerte.</p>')+
+'</div><div class="panel"><h3>Dernières ventes</h3>'+
+table(['Date','Client','Total','Reste'],db.sales.slice().reverse().slice(0,5).map(s=>'<tr><td>'+esc(s.date)+'</td><td>'+esc(clientName(s.clientId))+'</td><td>'+money(s.total)+'</td><td>'+money(due(s))+'</td></tr>').join(''))+'</div>';
+}
+
+function products(c){
+c.innerHTML=title('Produits & stock')+
+'<div class="actions"><button class="btn" onclick="productForm()">+ Nouveau produit</button><button class="btn secondary" onclick="restockForm()">+ Ajouter du stock</button></div>'+
+'<div class="panel">'+table(['Référence','Produit','Achat','Vente','Stock','Action'],db.products.map(p=>'<tr><td>'+esc(p.sku||'—')+'</td><td><b>'+esc(p.name)+'</b></td><td>'+money(p.cost)+'</td><td>'+money(p.price)+'</td><td>'+p.qty+'</td><td><button class="btn secondary" onclick="productForm(\''+p.id+'\')">Modifier</button></td></tr>').join(''))+'</div>';
+}
+
+function sales(c){
+c.innerHTML=title('Ventes')+
+'<button class="btn" onclick="saleForm()">+ Enregistrer une vente</button>'+
+'<div class="panel">'+table(['Date','N°','Client','Total','Payé','Reste','Action'],db.sales.slice().reverse().map(s=>'<tr><td>'+esc(s.date)+'</td><td>'+esc(s.ref)+'</td><td>'+esc(clientName(s.clientId))+'</td><td>'+money(s.total)+'</td><td>'+money(paid(s))+'</td><td>'+money(due(s))+'</td><td><button class="btn secondary" onclick="paymentForm(\''+s.id+'\')">Encaisser</button></td></tr>').join(''))+'</div>';
+}
+
+function clients(c){
+c.innerHTML=title('Clients')+
+'<button class="btn" onclick="personForm(\'clients\')">+ Ajouter un client</button>'+
+'<div class="panel">'+table(['Nom','Téléphone','Ville','Ventes','Solde dû'],db.clients.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(x.phone)+'</td><td>'+esc(x.city)+'</td><td>'+money(sum(db.sales.filter(s=>s.clientId===x.id),s=>s.total))+'</td><td>'+money(sum(db.sales.filter(s=>s.clientId===x.id),due))+'</td></tr>').join(''))+'</div>';
+}
+
+function suppliers(c){
+c.innerHTML=title('Fournisseurs')+
+'<button class="btn" onclick="personForm(\'suppliers\')">+ Ajouter un fournisseur</button>'+
+'<div class="panel">'+table(['Nom','Téléphone','Ville','Note'],db.suppliers.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(x.phone)+'</td><td>'+esc(x.city)+'</td><td>'+esc(x.note)+'</td></tr>').join(''))+'</div>';
+}
+
+function expenses(c){
+c.innerHTML=title('Dépenses')+
+'<button class="btn" onclick="expenseForm()">+ Ajouter une dépense</button>'+
+'<div class="panel">'+table(['Date','Catégorie','Libellé','Montant'],db.expenses.slice().reverse().map(x=>'<tr><td>'+esc(x.date)+'</td><td>'+esc(x.category)+'</td><td>'+esc(x.label)+'</td><td>'+money(x.amount)+'</td></tr>').join(''))+'</div>';
+}
+
+function reports(c){
+const rev=sum(db.sales,s=>s.total);
+const cost=sum(db.sales,s=>sum(s.items||[],i=>i.cost*i.qty));
+const ex=sum(db.expenses,e=>e.amount);
+c.innerHTML=title('Rapports')+
+'<div class="grid">'+[
+['Ventes totales',money(rev)],
+['Coût des articles vendus',money(cost)],
+['Dépenses',money(ex)],
+['Résultat estimé',money(rev-cost-ex)],
+['Montant encaissé',money(sum(db.sales,paid))],
+['Créances clients',money(sum(db.sales,due))]
+].map(x=>'<div class="stat"><span>'+x[0]+'</span><strong>'+x[1]+'</strong></div>').join('')+
+'</div><div class="panel"><button class="btn" onclick="exportCSV()">Exporter les ventes CSV</button></div>';
+}
+
+function openForm(html){
+$('#modalBody').innerHTML=html;
+$('#modal').classList.remove('hidden');
+}
+function closeForm(){$('#modal').classList.add('hidden')}
+function field(label,name,type='text',value='',required=true,extra=''){
+return '<div class="field"><label>'+label+'</label><input name="'+name+'" type="'+type+'" value="'+esc(value)+'" '+(required?'required':'')+' '+extra+'></div>';
+}
+function formStart(t,body,fn){
+openForm('<h2>'+t+'</h2><form id="editForm"><div class="formgrid">'+body+'</div><div class="dialogfoot"><button type="button" class="btn secondary" onclick="closeForm()">Annuler</button><button class="btn">Enregistrer</button></div></form>');
+$('#editForm').onsubmit=e=>{
+e.preventDefault();
+try{fn(new FormData(e.target));save();closeForm();show();toast('Enregistré avec succès.')}
+catch(err){toast(err.message)}
+};
+}
+
+function productForm(id){
+const p=db.products.find(x=>x.id===id)||{};
+formStart(id?'Modifier le produit':'Nouveau produit',
+field('Nom','name','text',p.name)+
+field('Référence / SKU','sku','text',p.sku||'',false)+
+field('Prix d’achat (FCFA)','cost','number',p.cost??0,true,'min="0" step="1"')+
+field('Prix de vente (FCFA)','price','number',p.price??0,true,'min="0" step="1"')+
+field('Quantité en stock','qty','number',p.qty??0,true,'min="0" step="1"')+
+field('Seuil d’alerte','alert','number',p.alert??3,true,'min="0" step="1"'),
+f=>{
+let v=Object.fromEntries(f);
+if([v.cost,v.price,v.qty,v.alert].some(x=>!Number.isFinite(Number(x))||Number(x)<0))throw Error('Vérifie les montants et quantités.');
+if(!Number.isInteger(Number(v.qty))||!Number.isInteger(Number(v.alert)))throw Error('Les quantités doivent être des nombres entiers.');
+if(id)Object.assign(p,{...v,cost:+v.cost,price:+v.price,qty:+v.qty,alert:+v.alert});
+else db.products.push({id:uid(),...v,cost:+v.cost,price:+v.price,qty:+v.qty,alert:+v.alert});
+});
+}
+
+function restockForm(){
+if(!db.products.length){toast('Ajoute d’abord un produit.');return}
+formStart('Réapprovisionnement',
+'<div class="field"><label>Produit</label><select name="id">'+db.products.map(p=>'<option value="'+p.id+'">'+esc(p.name)+' · stock '+p.qty+'</option>').join('')+'</select></div>'+
+field('Quantité ajoutée','qty','number',1,true,'min="1" step="1"'),
+f=>{
+const p=db.products.find(x=>x.id===f.get('id'));
+const q=Number(f.get('qty'));
+if(!Number.isInteger(q)||q<1)throw Error('Quantité invalide.');
+p.qty+=q;
+});
+}
+
+function personForm(type){
+formStart(type==='clients'?'Nouveau client':'Nouveau fournisseur',
+field('Nom','name')+field('Téléphone','phone','tel','',false)+field('Ville','city','text','',false)+
+(type==='suppliers'?field('Note','note','text','',false):''),
+f=>db[type].push({id:uid(),name:f.get('name'),phone:f.get('phone'),city:f.get('city'),note:f.get('note')||''}));
+}
+
+function saleForm(){
+if(!db.products.length){toast('Ajoute d’abord des produits.');return}
+const opts=db.products.map(p=>'<option value="'+p.id+'">'+esc(p.name)+' · '+money(p.price)+' · stock '+p.qty+'</option>').join('');
+const clients='<option value="">Client comptoir</option>'+db.clients.map(x=>'<option value="'+x.id+'">'+esc(x.name)+'</option>').join('');
+formStart('Nouvelle vente',
+'<div class="field"><label>Produit</label><select name="product">'+opts+'</select></div>'+
+field('Quantité','qty','number',1,true,'min="1" step="1"')+
+'<div class="field"><label>Client</label><select name="client">'+clients+'</select></div>'+
+field('Montant reçu (FCFA)','received','number',0,true,'min="0" step="1"'),
+f=>{
+const p=db.products.find(x=>x.id===f.get('product'));
+const q=Number(f.get('qty')),r=Number(f.get('received')),total=p.price*q;
+if(!Number.isInteger(q)||q<1||q>p.qty)throw Error('Quantité invalide ou stock insuffisant.');
+if(!Number.isFinite(r)||r<0||r>total)throw Error('Montant reçu invalide.');
+p.qty-=q;
+db.sales.push({id:uid(),ref:'V-'+Date.now().toString().slice(-6),date:dateNow(),clientId:f.get('client'),items:[{productId:p.id,name:p.name,qty:q,price:p.price,cost:p.cost}],total,payments:r?[{amount:r,date:dateNow()}]:[]});
+});
+}
+
+function paymentForm(id){
+const s=db.sales.find(x=>x.id===id),left=due(s);
+if(left<=0){toast('Cette vente est déjà réglée.');return}
+formStart('Encaisser un paiement',
+'<div class="field"><label>Reste à payer</label><input value="'+money(left)+'" disabled></div>'+
+field('Montant reçu (FCFA)','amount','number',left,true,'min="1" max="'+left+'" step="1"'),
+f=>{
+const a=Number(f.get('amount'));
+if(!Number.isFinite(a)||a<=0||a>left)throw Error('Montant invalide.');
+s.payments=s.payments||[];
+s.payments.push({amount:a,date:dateNow()});
+});
+}
+
+function expenseForm(){
+formStart('Nouvelle dépense',
+field('Date','date','date',dateNow())+
+'<div class="field"><label>Catégorie</label><select name="category"><option>Transport</option><option>Loyer</option><option>Électricité / eau</option><option>Salaire</option><option>Approvisionnement</option><option>Autre</option></select></div>'+
+field('Libellé','label')+
+field('Montant (FCFA)','amount','number',0,true,'min="1" step="1"'),
+f=>{
+const a=Number(f.get('amount'));
+if(!Number.isFinite(a)||a<=0)throw Error('Montant invalide.');
+db.expenses.push({id:uid(),date:f.get('date'),category:f.get('category'),label:f.get('label'),amount:a});
+});
+}
+
+function download(blob,name){
+const a=document.createElement('a');
+const u=URL.createObjectURL(blob);
+a.href=u;a.download=name;
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function backup(){
+download(new Blob([JSON.stringify({app:'Gestion commerciale Pro',version:1,data:db},null,2)],{type:'application/json'}),'sauvegarde-gestion-tounkara.json');
+}
+async function restoreData(e){
+const file=e.target.files[0];if(!file)return;
+try{
+const x=JSON.parse(await file.text()),d=x.data||x;
+if(!d||!['products','sales','clients','suppliers','expenses'].every(k=>Array.isArray(d[k])))throw Error();
+if(!confirm('Remplacer les données actuelles par cette sauvegarde ?'))return;
+db=d;save();show();toast('Sauvegarde restaurée.');
+}catch(err){toast('Fichier de sauvegarde invalide.')}
+e.target.value='';
+}
+function exportCSV(){
+const rows=[['Date','Référence','Client','Total','Payé','Reste'],...db.sales.map(s=>[s.date,s.ref,clientName(s.clientId),s.total,paid(s),due(s)])];
+const csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(';')).join('\n');
+download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'ventes-tounkara.csv');
+}
+$('#nav').onclick=e=>{
+const b=e.target.closest('[data-page]');
+if(b){page=b.dataset.page;show()}
+};
+show();
+</script>
+</body>
+</html>
